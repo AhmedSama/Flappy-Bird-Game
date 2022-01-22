@@ -14,7 +14,7 @@ let gameover = false
 let score = 0
 let scoreOutput = document.querySelector("[data-score]")
 
-if(window.innerWidth < 400){
+if(window.innerWidth < 600){
     canvas.width = window.innerWidth
     canvas.height = 500
 }
