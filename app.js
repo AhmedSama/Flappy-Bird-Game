@@ -184,6 +184,9 @@ addEventListener("keypress",(event)=>{
         myBird.jump()
     }
 })
+canvas.addEventListener("touchstart",()=>{
+    myBird.jump()
+})
 
 // ============== END INPUT LISTENERS ==============
 
