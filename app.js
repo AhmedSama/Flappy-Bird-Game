@@ -1,11 +1,13 @@
 // TODO make start window
 
 
-// ============== MAIN VARIABLES ==============
+// ============== MAIN VARIABLES & CONSTANTS ==============
 const canvas = document.querySelector("canvas")
 const ctx = canvas.getContext("2d")
+const StartWindow = document.querySelector("[data-start]")
+const WindowScore = document.querySelector("[data-score-output]")
+const restartBTN = document.querySelector("[data-restart-btn]")
 const GRAVITY = 0.5
-const wallList = []
 const GAP = 120
 
 let makeWallIntervalID, removeWallIntervalID;
@@ -13,6 +15,8 @@ let myBird;
 let gameover = false
 let score = 0
 let scoreOutput = document.querySelector("[data-score]")
+let wallList = []
+
 
 if(window.innerWidth < 600){
     canvas.width = window.innerWidth
@@ -78,6 +82,8 @@ function GameOver(){
     wallList.forEach(wall=>{
         wall.speed = 0
     })
+    WindowScore.textContent = score
+    StartWindow.classList.add("active")
 }
 
 // ============== END UTILITY FUNCTIONS ==============
@@ -121,7 +127,6 @@ class Bird{
         ctx.fillStyle = "rgb(255, 230, 0)"
         ctx.arc(this.pos.x,this.pos.y,this.radius,0,Math.PI*2)
         ctx.fill()
-        Draw(this.pos.x,this.pos.y)
     }
     move(){
         this.collisionWithGround()
@@ -193,6 +198,11 @@ addEventListener("keypress",(event)=>{
 canvas.addEventListener("touchstart",()=>{
     myBird.jump()
 })
+restartBTN.addEventListener("click",()=>{
+    Start()
+})
+
+
 
 // ============== END INPUT LISTENERS ==============
 
@@ -219,7 +229,26 @@ removeWallIntervalID = setInterval(() => {
 
 
 function Start(){
+    gameover = false
 
+    makeWallIntervalID = setInterval(()=>{
+        makeWall()
+    },1000)
+
+    removeWallIntervalID = setInterval(() => {
+        wallList.forEach(wall=>{
+            if(wall.canRemove)
+                removeWall(wall)
+        })
+    }, 1000);
+
+    myBird.speed.y = 5
+    myBird.canJump = true
+    myBird.pos = new Vector2D(canvas.width/4,canvas.height/6)
+    wallList = []
+    WindowScore.textContent = 0
+    StartWindow.classList.remove("active")
+    score = 0
 }
 
 function Update(){
